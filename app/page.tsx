@@ -1,33 +1,51 @@
 "use client";
+
 import { useState } from "react";
 
-const IndexPage = () => {
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([
-    { id: 1, content: "Todo1" },
-    { id: 2, content: "Todo2" },
-    { id: 3, content: "Todo3" }
-  ]);
-const handleAddTodoFromChanged = (event) => {
-  setTodo(event.target.value)
-}
-const addTodo = () => {
-  setTodos([{id: todos.length+1, content: todo}, ...todos])
-}
+export default function TipCalculator() {
+  const [bill, setBill] = useState(0);
+  const [tipPercent, setTipPercent] = useState(0);
+  const [tipTotal, setTipTotal] = useState(0);
+  const [billTotal, setBillTotal] = useState(0);
+
+  const calculate = () => {
+    const tip = (bill * tipPercent) / 100;
+    setTipTotal(tip);
+    setBillTotal(bill + tip);
+  };
+
   return (
-    <>
-      <div>{todo}</div>
+    <div className="p-10 space-y-6">
+      <h1 className="text-xl font-bold">Tip Calculator</h1>
 
-      <input className="border h-5" type="text" onChange={handleAddTodoFromChanged} />
+      <div>
+        <span>bill: </span>
+        <input
+          type="number"
+          value={bill}
+          onChange={(e) => setBill(Number(e.target.value))}
+          className="outline-none"
+        />
+      </div>
 
-      <button onClick={addTodo}>Add</button>
+      <div>
+        <span>Tip: </span>
+        <button 
+          onClick={() => setTipPercent(5)}
+          className={tipPercent === 5 ? "font-bold text-blue-600" : ""}
+        >
+          5%
+        </button>
+      </div>
 
-      <ul>
-        {todos.map(todo => (<li key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-    </>
+      <button onClick={calculate} className="block font-bold">
+        Calculate
+      </button>
+
+      <div className="space-y-2">
+        <div>Tip Total: {tipTotal}</div>
+        <div>Bill Total: {billTotal}</div>
+      </div>
+    </div>
   );
-};
-
-export default IndexPage;
+}
